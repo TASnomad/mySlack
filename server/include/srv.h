@@ -17,17 +17,4 @@ int		prepare_srv_socket(char *);
 void 	main_server(int, int);
 int 	read_socket_data(int, char *);
 
-typedef	struct	s_action
-{
-	char		*name;
-	int			(*cmd)();
-}				t_action;
-
-typedef struct 	s_client
-{
-	int fd;
-	char *name;
-	char *channel;
-}				t_client;
-
 #endif /* _SRV_H_ */

@@ -6,8 +6,9 @@
 #include				<libmy.h>
 #include				<stdlib.h>
 #include				<srv.h>
+#include				<client.h>
 
-//t_client				*clients;
+t_list	*clients;
 
 int						prepare_srv_socket(char *port)
 {
@@ -42,7 +43,6 @@ int 					read_socket_data(int sock, char *buffer)
 
 void 					main_server(int srv, int max_listen)
 {
-	int *clients;
 	fd_set actives;
 	fd_set readfds;
 	int new_clt;
@@ -51,8 +51,9 @@ void 					main_server(int srv, int max_listen)
 	char buffer[1024];
 	struct sockaddr_in	client;
 
+	init_clients(clients);
 	my_memset((void *) &client, 0x0, sizeof(client));
-	clients = (int *) calloc(FD_SETSIZE, sizeof(int));
+	//clients = (int *) calloc(FD_SETSIZE, sizeof(int));
 	len = sizeof(socklen_t);
 	if (listen(srv, max_listen) < 0)
 		return (my_putstr("Server can\'t listen on selected port !\nAbort now !\n"));
@@ -97,58 +98,4 @@ void 					main_server(int srv, int max_listen)
 		}
 	}
 	close(srv);
-		// while (i <= maxCount)
-		// {
-		// 	/* One fd has changed */
-		// 	if (FD_ISSET(i, &readfds))
-		// 	{
-		// 		/* New TCP connection ? */
-		// 		if (i == srv)
-		// 		{
-		// 			len = sizeof(client);
-		// 			if ((new_clt = accept(srv, (struct sockaddr *) &client, (socklen_t *) &len)) < 0)
-		// 			{
-		// 				my_putstr("Can\'t add new client for the server\n");
-		// 			}
-		// 			else
-		// 			{
-		// 				PRINT_STR("Client: ", inet_ntoa(client.sin_addr))
-		// 				FD_SET(new_clt, &master);
-		// 				if (new_clt > maxCount)
-		// 					maxCount = new_clt;
-		// 				/* Client data handling */
-		// 				else
-		// 				{
-		// 					my_putstr("TODO: handle client data\n");
-		// 					if ((rcv = read_socket_data(activity, buffer)) <= 0)
-		// 					{
-		// 						if (rcv == 0)
-		// 						{
-		// 							close(i);
-		// 							FD_CLR(i, &master);
-		// 						}
-		// 						else
-		// 						{
-		// 							j = 0;
-		// 							while (j <= maxCount)
-		// 							{
-		// 								/* Broadcast */
-		// 								if (FD_ISSET(j, &master))
-		// 								{
-		// 									if (j != srv && j != i)
-		// 									{
-		// 										send(j, buffer, 1024,  0);
-		// 									}
-		// 								}
-		// 								j++;
-		// 							}
-		// 						}
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// 	i++;
-		// }
-	// }
 }

@@ -7,10 +7,9 @@
 
 int main(int argc, char **argv)
 {
-    int sock;
-	int i;
-	int len;
+	int sock;
 	char **test;
+	char *test2;
 
 	if (argc < 2)
 	{
@@ -19,16 +18,11 @@ int main(int argc, char **argv)
 		my_putstr(" <PORT TO START SERVER>\n");
 		return (-1);
 	}
-	len = 0;
-	test = my_explode("login;toto;pooop;troll;pouet", ';');
-	LEN(len, test);
-	i = 0;
-	while (i < len)
-	{
-		my_putstr(*(test + i));
-		my_putchar('\n');
-		i++;
-	}
+
+	test = my_explode("login;toto;poop;troll;pouet", ';');
+	test2 = my_implode(test, ';');
+	my_putstr(test2);
+	my_putchar('\n');
 	sock = prepare_srv_socket(*(argv + 1));
 	if (sock < 0)
 		return (-1);

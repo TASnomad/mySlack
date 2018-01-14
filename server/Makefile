@@ -1,10 +1,11 @@
 CC = 		gcc
-CFLAGS =	-Wall -Werror -Wextra -I./include
+CFLAGS =	-Wall -Werror -Wextra -I./include -g2
 LDFLAGS =	-L./libmy -lmy
 NAME =		my_slack
 SRC =		my_memset.c \
 			my_explode.c \
 			my_connection.c \
+			client.c \
 			main.c
 LIB_NAME =	libmy.a
 OBJS =		$(SRC:%.c=%.o)
