@@ -25,11 +25,19 @@ typedef struct      s_list
     int             nb_elem;
 }                   t_list;
 
-int         init_clients(t_list *);
+t_list	*clients;
+
+int         init_clients(t_list **);
 void        add_client(t_list *, t_client *);
 void        rmv_client(t_list *, t_client *);
 
 t_client    *create_client(int, char *, char *);
 t_client    *find_client_by_sock(t_list *, int);
+
+int         handle_login();
+int         handle_new_msg();
+int         is_login_taken(t_list *, char *);
+
+int		    handle_incoming(int, char *, int);
 
 #endif /* ! _CLIENT_H_ */

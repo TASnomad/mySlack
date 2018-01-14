@@ -15,6 +15,7 @@ int 		main(int argc, char **argv)
 	int		client;
 	char	buffer[BUFFSIZE];
 
+	(void) buffer;
 	if (argc < 3)
 	{
 		PRINT_STR("Usage: ", *argv, " <SERVER IP>, <PORT TO CONNECT>");
@@ -26,11 +27,7 @@ int 		main(int argc, char **argv)
 		PRINT_STR("Unable to connect: ", *argv, " exits now !");
 		return (-1);
 	}
-	my_memset(buffer, 'a', 42);
-	send(client, buffer, 42, 0);
-	recv(client, buffer, BUFFSIZE, 0);
-	write(1, buffer, BUFFSIZE);
-	sleep(1);
+	login_server(client);
 	close(client);
 	return (0);
 }

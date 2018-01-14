@@ -8,8 +8,6 @@
 #include				<srv.h>
 #include				<client.h>
 
-t_list	*clients;
-
 int						prepare_srv_socket(char *port)
 {
 	int					srv_socket;
@@ -51,9 +49,8 @@ void 					main_server(int srv, int max_listen)
 	char buffer[1024];
 	struct sockaddr_in	client;
 
-	init_clients(clients);
+	init_clients(&clients);
 	my_memset((void *) &client, 0x0, sizeof(client));
-	//clients = (int *) calloc(FD_SETSIZE, sizeof(int));
 	len = sizeof(socklen_t);
 	if (listen(srv, max_listen) < 0)
 		return (my_putstr("Server can\'t listen on selected port !\nAbort now !\n"));
@@ -77,21 +74,22 @@ void 					main_server(int srv, int max_listen)
 						return (my_putstr("Server is full !\n"));
 					PRINT_STR("Client: ", inet_ntoa(client.sin_addr))
 					FD_SET(new_clt, &actives);
+					t_client *clt = create_client(new_clt, 0x0, 0x0);
+					if (clt)
+						add_client(clients, clt);
 				}
 				else
 				{
 					rcv = read_socket_data(j, buffer);
-					my_put_nbr(rcv);
 					if (rcv <= 0)
 					{
-						PRINT_NBR("Closing socket: ", j)
 						close(j);
 						FD_CLR(j, &actives);
 					}
 					else
 					{
-						PRINT_STR("Data received: ", buffer)
-						send(j, buffer, rcv, 0);
+						handle_incoming(j, buffer, rcv);
+						// send(j, buffer, rcv, 0);
 					}
 				}
 			}

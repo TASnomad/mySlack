@@ -30,16 +30,34 @@ t_client        *find_client_by_sock(t_list *list, int sock)
     return (res);
 }
 
-int             init_clients(t_list *list)
+int             is_login_taken(t_list *list, char *name)
 {
-    if (!list)
-        list = (t_list *) malloc(sizeof(t_list));
-    my_memset(list, 0x0, sizeof(t_list));
-    if (!list)
-        return (0);
-    list->first = 0x0;
-    list->last = 0x0;
-    list->nb_elem = 0;
+    int         res;
+    int         found;
+    t_client    *base;
+
+    base = list->first;
+    res = 0;
+    found = 0;
+    while (list->first->next || !found)
+    {
+        if (!list->first->name)
+            return (0);
+        if (my_strcmp(name, list->first->name) == 0)
+                found = res = 1;
+        list->first = list->first->next;
+    }
+    list->first = base;
+    return (res);
+}
+
+int             init_clients(t_list **list)
+{
+    if (!*list)
+        *list = (t_list *) malloc(sizeof(t_list));
+    (*list)->first = 0x0;
+    (*list)->last = 0x0;
+    (*list)->nb_elem = 0;
     return (1);
 }
 

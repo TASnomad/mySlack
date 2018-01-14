@@ -8,8 +8,6 @@
 int main(int argc, char **argv)
 {
 	int sock;
-	char **test;
-	char *test2;
 
 	if (argc < 2)
 	{
@@ -18,11 +16,6 @@ int main(int argc, char **argv)
 		my_putstr(" <PORT TO START SERVER>\n");
 		return (-1);
 	}
-
-	test = my_explode("login;toto;poop;troll;pouet", ';');
-	test2 = my_implode(test, ';');
-	my_putstr(test2);
-	my_putchar('\n');
 	sock = prepare_srv_socket(*(argv + 1));
 	if (sock < 0)
 		return (-1);

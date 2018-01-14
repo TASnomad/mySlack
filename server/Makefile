@@ -4,6 +4,7 @@ LDFLAGS =	-L./libmy -lmy
 NAME =		my_slack
 SRC =		my_memset.c \
 			my_explode.c \
+			actions.c \
 			my_connection.c \
 			client.c \
 			main.c
