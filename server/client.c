@@ -14,6 +14,8 @@ t_client        *create_client(int sock, char *name, char *channel)
     clt->fd = sock;
     clt->name = name;
     clt->channel = channel;
+    clt->next = 0x0;
+    clt->prev = 0x0;
     return (clt);
 }
 
@@ -39,11 +41,13 @@ int             is_login_taken(t_list *list, char *name)
     base = list->first;
     res = 0;
     found = 0;
+    /* Special handling, if there is one link but whitout */
+    if (!list->first->next && !list->first->name)
+        return (0);
     while (list->first->next || !found)
     {
-        if (!list->first->name)
-            return (0);
-        if (my_strcmp(name, list->first->name) == 0)
+        if (list->first->name)
+            if (my_strcmp(name, list->first->name) == 0)
                 found = res = 1;
         list->first = list->first->next;
     }

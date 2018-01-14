@@ -52,6 +52,7 @@ char		*login_server(int sock)
 	my_putstr(buffer);
 	PRINT_STR("Login as: ", cmd[1], "\nPlease wait ...");
 	send(sock, buffer, my_strlen(buffer), 0);
+	my_memset(buffer, 0x0, 512);
 	count = recv(sock, buffer, 512, 0);
 	PRINT_STR("Data received from server: ", buffer, "\n");
 	return (cmd[1]);

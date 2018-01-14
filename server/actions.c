@@ -24,8 +24,6 @@ int             handle_login(int sock, char *buff)
     {
         free(cmd[1]);
         cmd[1] = my_strdup("KO");
-        response = my_implode(cmd, ';');
-        send(sock, response, my_strlen(response), 0);
     }
     else
     {
@@ -35,9 +33,9 @@ int             handle_login(int sock, char *buff)
         clt->name = my_strdup(cmd[1]);
         free(cmd[1]);
         cmd[1] = my_strdup("OK");
-        response = my_implode(cmd, ';');
-        send(sock, response, my_strlen(response), 0);
     }
+    response = my_implode(cmd, ';');
+    send(sock, response, my_strlen(response), 0);
     return (!res);
 }
 
