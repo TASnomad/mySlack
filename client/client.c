@@ -42,19 +42,19 @@ char		*login_server(int sock)
 	if (!buffer || !cmd)
 		return (0x0);
 	my_putstr("Votre login: ");
-	while ((count = read(0, buffer, 512)) < 1)
+	while ((count = read(0, buffer, 512)) < 2)
 		my_putstr("Votre login: ");
 	cmd[0] = my_strdup(LOGIN_CMD);
 	cmd[1] = (char *) malloc(count * sizeof(char));
 	my_strncpy(cmd[1], buffer, count);
 	my_memset(buffer, 0x0, 512);
 	buffer = my_implode(cmd, ';');
-	my_putstr(buffer);
 	PRINT_STR("Login as: ", cmd[1], "\nPlease wait ...");
 	send(sock, buffer, my_strlen(buffer), 0);
 	my_memset(buffer, 0x0, 512);
 	count = recv(sock, buffer, 512, 0);
-	PRINT_STR("Data received from server: ", buffer, "\n");
+	if (!my_strstr(buffer, "OK"))
+		return (0x0);
 	return (cmd[1]);
 }
 
