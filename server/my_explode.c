@@ -53,7 +53,8 @@ char		**my_explode(char *str, char del)
 
 	i = j = k = 0;
 	len = my_strlen(str);
-	tmp = res = 0x0;
+	tmp = 0x0;
+	res = 0x0;
 	res = (char **) realloc(res, sizeof(char **));
 	res[0] = (char *) malloc(len * sizeof(char));
 	while (i < len + 1)
