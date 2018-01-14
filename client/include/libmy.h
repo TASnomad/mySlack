@@ -11,7 +11,17 @@
 #ifndef _LIB_MY_H_
 # define _LIB_MY_H_
 
+/*
+** project purpose functions
+*/
+
 void    *my_memset(void *, int, int);
+char	**my_explode(char *, char);
+char    *my_implode(char **, char);
+
+/*
+** functions written during ETNA piscine
+*/
 
 void    my_putchar(char c);
 int     my_isneg(int n);

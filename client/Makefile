@@ -3,6 +3,8 @@ CFLAGS =	-Wall -Werror -Wextra -I./include
 LDFLAGS =	-L./libmy -lmy
 NAME =		my_slack_clt
 SRC =		my_memset.c \
+			my_implode.c \
+			my_explode.c \
 			client.c \
 			main.c
 LIB_NAME =	libmy.a
