@@ -55,6 +55,22 @@ int             is_login_taken(t_list *list, char *name)
     return (res);
 }
 
+void            print_clients(t_list *list)
+{
+    t_client    *base;
+
+    base = list->first;
+    while (list->first->next)
+    {
+        
+        PRINT_NBR("Socket: ", list->first->fd)
+        if (list->first->name)
+            PRINT_STR("Loged as: ", list->first->name)
+        list->first = list->first->next;
+    }
+    list->first = base;
+}
+
 int             init_clients(t_list **list)
 {
     if (!*list)

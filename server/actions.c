@@ -11,6 +11,17 @@ t_action    actions[] = {
     { 0x0, 0x0 }
 };
 
+void            broadcast_to_channel(int sender, char *msg)
+{
+    char        **builder;
+    char        *msg;
+    t_client    *clt;
+
+    builder = (char **) malloc(3 * sizeof(char *));
+    clt = find_client_by_sock(clients, sender);
+
+}
+
 int             handle_login(int sock, char *buff)
 {
     char        **cmd;
@@ -36,14 +47,22 @@ int             handle_login(int sock, char *buff)
     }
     response = my_implode(cmd, ';');
     send(sock, response, my_strlen(response), 0);
+    print_clients(clients);
+    free(response);
+    free(cmd);
     return (!res);
 }
 
 int             handle_new_msg(int sock, char *raw, int raw_size)
 {
+    char        **cmd;
+    char        *response;
+    cmd = my_explode(raw, ';');
+
     (void) sock;
     (void) raw;
     (void) raw_size;
+    (void) cmd;
     return (1);
 }
 
@@ -67,5 +86,6 @@ int             handle_incoming(int sock_clt, char *raw_buff, int raw_size)
         }
         i += 1;
     }
+    free(cmd);
     return (res);
 }
