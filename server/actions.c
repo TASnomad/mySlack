@@ -1,4 +1,5 @@
 #include    <client.h>
+#include    <srv.h>
 #include    <libmy.h>
 #include    <stdlib.h>
 #include    <sys/types.h>
@@ -14,12 +15,15 @@ t_action    actions[] = {
 void            broadcast_to_channel(int sender, char *msg)
 {
     char        **builder;
-    char        *msg;
+    char        *res;
     t_client    *clt;
 
+    (void) msg;
+    (void) res;
     builder = (char **) malloc(3 * sizeof(char *));
     clt = find_client_by_sock(clients, sender);
-
+    (void) clt;
+    (void) builder;
 }
 
 int             handle_login(int sock, char *buff)
@@ -59,6 +63,7 @@ int             handle_new_msg(int sock, char *raw, int raw_size)
     char        *response;
     cmd = my_explode(raw, ';');
 
+    (void) response;
     (void) sock;
     (void) raw;
     (void) raw_size;

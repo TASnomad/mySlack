@@ -12,8 +12,25 @@
 #define MSG_RECV_CMD    "recv_msg"
 #define CHANNEL_CMD     "channel"
 
-int     spawn_client(char *, char *);
-char    *login_server(int);
-void    main_client(int);
+#define	BUFSIZE		512
+
+#define	CMD_PROMPT(chan, login)	\
+	my_putstr("my_slack # "); \
+	my_putstr(login); \
+	my_putchar('@'); \
+	my_putstr(chan); \
+	my_putstr(" > ");
+
+typedef struct	s_client
+{
+	int	fd;
+	char	*name;
+	char	*channel;
+}		t_client;
+
+int		spawn_client(char *, char *);
+int		send_msg(t_client *);
+t_client	*login_server(int);
+void		main_client(t_client *);
 
 #endif /* ! _CLIENT_H_ */

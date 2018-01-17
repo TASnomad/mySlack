@@ -1,8 +1,7 @@
 #include <libmy.h>
 #include <client.h>
 #include <unistd.h>
-
-#define BUFFSIZE	1024
+#include <stdlib.h>
 
 #define PRINT_STR(prefix, variable, suffix) \
 	my_putstr(prefix); \
@@ -13,7 +12,7 @@
 int 		main(int argc, char **argv)
 {
 	int		client;
-	char	*login;
+	t_client	*clt;
 
 	if (argc < 3)
 	{
@@ -26,14 +25,17 @@ int 		main(int argc, char **argv)
 		PRINT_STR("Unable to connect: ", *argv, " exits now !");
 		return (-1);
 	}
-	login = login_server(client);
-	if (!login)
+	clt = login_server(client);
+	if (!clt)
 	{
 		my_putstr("Login process, abort now !\n");
 		return (-1);
 	}
 	my_putstr("Connected to the server !\n");
-	send(client, 0x0, 0, 0);
-	close(client);
+	main_client(clt);
+	close(clt->fd);
+	//free(clt->name);
+	//free(clt->channel);
+	free(clt);
 	return (0);
 }

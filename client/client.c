@@ -30,35 +30,69 @@ int			spawn_client(char *ip, char *port)
 	return (sock);
 }
 
-char		*login_server(int sock)
+t_client		*login_server(int sock)
 {
 	int		count;
-	char	*buffer;
-	char	**cmd;
+	char		buffer[BUFSIZE];
+	char		**cmd;
+	t_client	*c;
 
 	count = 0;
+	c = (t_client *) malloc(sizeof(t_client));
 	cmd = (char **) malloc(2 * sizeof(char **));
-	buffer = (char *) malloc(512 * sizeof(char));
-	if (!buffer || !cmd)
+	if (!cmd || !c)
 		return (0x0);
 	my_putstr("Votre login: ");
-	while ((count = read(0, buffer, 512)) < 2)
+	while ((count = read(0, buffer, BUFSIZE)) < 2)
 		my_putstr("Votre login: ");
-	cmd[0] = my_strdup(LOGIN_CMD);
-	cmd[1] = (char *) malloc(count * sizeof(char));
-	my_strncpy(cmd[1], buffer, count);
-	my_memset(buffer, 0x0, 512);
-	buffer = my_implode(cmd, ';');
+	cmd[0] = LOGIN_CMD;
+	cmd[1] = (char *) malloc(count - 1 * sizeof(char));
+	my_strncpy(cmd[1], buffer, count - 1);
+	c->name = (char *) malloc(count * sizeof(char));
+	c->channel = (char *) malloc(my_strlen("general") * sizeof(char));
+	my_memset(buffer, 0x0, 132);
+	my_strcpy(buffer, my_implode(cmd, ';'));
 	PRINT_STR("Login as: ", cmd[1], "\nPlease wait ...");
 	send(sock, buffer, my_strlen(buffer), 0);
-	my_memset(buffer, 0x0, 512);
-	count = recv(sock, buffer, 512, 0);
-	if (!my_strstr(buffer, "OK"))
+	my_memset(buffer, 0x0, 132);
+	count = recv(sock, buffer, 132, 0);
+	if (!my_strstr(buffer, "OK") || count < 1)
+	{
+		free(c);
 		return (0x0);
-	return (cmd[1]);
+	}
+	c->fd = sock;
+	my_strncpy(c->name, cmd[1], my_strlen(cmd[1]));
+	c->channel = "general";
+	free(cmd);
+	return (c);
 }
 
-void		main_client(int sock)
+int		send_msg(t_client *clt)
 {
-	(void) sock;
+	char	**cmd;
+	(void) clt;
+	(void) cmd;
+	return (0);
+}
+
+void		main_client(t_client *clt)
+{
+	int	run;
+	int	readed;
+	char	msg[BUFSIZE];
+
+	run = 1;
+	readed = 0;
+	while (run)
+	{
+		my_memset(msg, 0x0, BUFSIZE);
+		CMD_PROMPT(clt->channel, clt->name);
+		readed = read(1, msg, BUFSIZE);
+		if (readed < 0)
+			run = 0;
+		if (my_strncmp("quit", msg, my_strlen("quit")) == 0)
+			run = 0;
+	}
+	my_putstr("Bye bye !\n");
 }

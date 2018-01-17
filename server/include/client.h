@@ -38,6 +38,8 @@ int         handle_login();
 int         handle_new_msg();
 int         is_login_taken(t_list *, char *);
 
+void		print_clients(t_list *);
+
 int		    handle_incoming(int, char *, int);
 
 #endif /* ! _CLIENT_H_ */

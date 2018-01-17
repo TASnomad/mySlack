@@ -1,5 +1,5 @@
 CC = 		gcc
-CFLAGS =	-Wall -Werror -Wextra -I./include
+CFLAGS =	-Wall -Werror -Wextra -I./include -g2
 LDFLAGS =	-L./libmy -lmy
 NAME =		my_slack_clt
 SRC =		my_memset.c \
