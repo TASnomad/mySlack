@@ -29,7 +29,7 @@ typedef struct	s_client
 }		t_client;
 
 int		spawn_client(char *, char *);
-int		send_msg(t_client *);
+int		send_msg(t_client *, char *);
 t_client	*login_server(int);
 void		main_client(t_client *);
 

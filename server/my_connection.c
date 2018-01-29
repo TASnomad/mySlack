@@ -48,6 +48,7 @@ void 					main_server(int srv, int max_listen)
 	int len, rcv;
 	char buffer[1024];
 	struct sockaddr_in	client;
+	t_client	*clt;
 
 	init_clients(&clients);
 	my_memset((void *) &client, 0x0, sizeof(client));
@@ -74,7 +75,7 @@ void 					main_server(int srv, int max_listen)
 						return (my_putstr("Server is full !\n"));
 					PRINT_STR("Client: ", inet_ntoa(client.sin_addr))
 					FD_SET(new_clt, &actives);
-					t_client *clt = create_client(new_clt, 0x0, 0x0);
+					clt = create_client(new_clt, 0x0, 0x0);
 					if (clt)
 						add_client(clients, clt);
 				}
@@ -83,13 +84,15 @@ void 					main_server(int srv, int max_listen)
 					rcv = read_socket_data(j, buffer);
 					if (rcv <= 0)
 					{
+						clt = find_client_by_sock(clients, j);
+						PRINT_STR("Closing socket: ", clt->name);
+						rmv_client(clients, clt);
 						close(j);
 						FD_CLR(j, &actives);
 					}
 					else
 					{
 						handle_incoming(j, buffer, rcv);
-						// send(j, buffer, rcv, 0);
 					}
 				}
 			}

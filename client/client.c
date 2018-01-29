@@ -1,6 +1,10 @@
 #include	<libmy.h>
 #include	<client.h>
 #include	<stdlib.h>
+#include	<errno.h>
+#include	<fcntl.h>
+#include	<unistd.h>
+#include	<sys/select.h>
 
 #define PRINT_STR(prefix, variable, suffix) \
 my_putstr(prefix); \
@@ -68,31 +72,81 @@ t_client		*login_server(int sock)
 	return (c);
 }
 
-int		send_msg(t_client *clt)
+int		handle_incoming(t_client *clt, char *raw)
+{
+	(void) clt;
+	(void) raw;
+	return (0);
+}
+
+int		send_msg(t_client *clt, char *raw)
 {
 	char	**cmd;
-	(void) clt;
-	(void) cmd;
-	return (0);
+	char	*req;
+
+	req = 0x0;
+	cmd = (char **) malloc(4 * sizeof(char *));
+	if (!cmd)
+		return (-1);
+	cmd[0] = "msg";
+	cmd[1] = clt->name;
+	cmd[2] = clt->channel;
+	cmd[3] = raw;
+	req = my_implode(cmd, ';');
+	return (send(clt->fd, req, my_strlen(req), 0));
+}
+
+int		rcv_msg(char *msg)
+{
+	char	**cmd;
+
+	cmd = my_explode(msg, ';');
+	if (!cmd)
+		return (0);
+	//CMD_PROMPT(cmd[2], cmd[1]);
+	write(1, cmd[3], my_strlen(cmd[3]));
+	my_putchar('\n');
+	free(cmd);
+	return (1);
 }
 
 void		main_client(t_client *clt)
 {
-	int	run;
-	int	readed;
-	char	msg[BUFSIZE];
+	int s;
+	int run;
+	int readed;
+	char msg[BUFSIZE];
+	fd_set rfds;
 
+	s = -1;
 	run = 1;
 	readed = 0;
 	while (run)
 	{
+		FD_ZERO(&rfds);
+		FD_SET(0, &rfds);
+		FD_SET(clt->fd, &rfds);
 		my_memset(msg, 0x0, BUFSIZE);
 		CMD_PROMPT(clt->channel, clt->name);
-		readed = read(1, msg, BUFSIZE);
-		if (readed < 0)
+		s = select(clt->fd + 1, &rfds, 0x0, 0x0, 0x0);
+		if (s < 0)
 			run = 0;
-		if (my_strncmp("quit", msg, my_strlen("quit")) == 0)
-			run = 0;
+		if (FD_ISSET(0, &rfds))
+		{
+			readed = read(0, msg, BUFSIZE);
+			if (readed < 0)
+				run = 0;
+			if (!my_strncmp("quit", msg, 4))
+				run = 0;
+			send_msg(clt, msg);
+		}
+		else if (FD_ISSET(clt->fd, &rfds))
+		{
+			readed = recv(clt->fd, msg, BUFSIZE, 0);
+			if (!readed)
+				run = 0;
+			rcv_msg(msg);
+		}
 	}
-	my_putstr("Bye bye !\n");
+	my_putstr("Déconnexion du serveur !!\n");
 }

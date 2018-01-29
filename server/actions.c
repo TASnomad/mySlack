@@ -14,16 +14,25 @@ t_action    actions[] = {
 
 void            broadcast_to_channel(int sender, char *msg)
 {
-    char        **builder;
-    char        *res;
     t_client    *clt;
+    t_client	*base;
 
-    (void) msg;
-    (void) res;
-    builder = (char **) malloc(3 * sizeof(char *));
+    base = clients->first;
     clt = find_client_by_sock(clients, sender);
-    (void) clt;
-    (void) builder;
+    if (!clt)
+	    return (my_putstr("Cannot retrieve !\n"));
+    while (clients->first)
+    {
+	    if (clients->first->fd != clt->fd)
+		    send(clients->first->fd, msg, my_strlen(msg), 0);
+	    //if (clients->first->channel) {
+		    //if ((my_strncmp(clt->channel, clients->first->channel, my_strlen(clt->channel))) == 0) {
+		//	    send(clients->first->fd, msg, my_strlen(msg), 0);
+		 //   }
+	    //}
+	    clients->first = clients->first->next;
+    }
+    clients->first = base;
 }
 
 int             handle_login(int sock, char *buff)
@@ -45,13 +54,12 @@ int             handle_login(int sock, char *buff)
         clt = find_client_by_sock(clients, sock);
         if (clt->name)
             free(clt->name);
-        clt->name = my_strdup(cmd[1]);
+	clt->name = my_strdup(cmd[1]);
         free(cmd[1]);
         cmd[1] = my_strdup("OK");
     }
     response = my_implode(cmd, ';');
     send(sock, response, my_strlen(response), 0);
-    print_clients(clients);
     free(response);
     free(cmd);
     return (!res);
@@ -61,7 +69,10 @@ int             handle_new_msg(int sock, char *raw, int raw_size)
 {
     char        **cmd;
     char        *response;
+   
     cmd = my_explode(raw, ';');
+    broadcast_to_channel(sock, raw);
+    free(cmd);
 
     (void) response;
     (void) sock;
