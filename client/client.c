@@ -103,7 +103,8 @@ int		rcv_msg(char *msg)
 	cmd = my_explode(msg, ';');
 	if (!cmd)
 		return (0);
-	//CMD_PROMPT(cmd[2], cmd[1]);
+	my_putchar('\n');
+	CMD_PROMPT(cmd[2], cmd[1]);
 	write(1, cmd[3], my_strlen(cmd[3]));
 	my_putchar('\n');
 	free(cmd);
