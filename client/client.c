@@ -1,4 +1,5 @@
 #include	<libmy.h>
+#include	<utils.h>
 #include	<client.h>
 #include	<stdlib.h>
 #include	<errno.h>
@@ -13,9 +14,9 @@ my_putstr(suffix); \
 my_putchar('\n');
 
 
-int			spawn_client(char *ip, char *port)
+int				spawn_client(char *ip, char *port)
 {
-	int					sock;
+	int			sock;
 	struct sockaddr_in 	target;
 
 	my_memset(&target, 0x0, sizeof(struct sockaddr_in));
@@ -34,12 +35,12 @@ int			spawn_client(char *ip, char *port)
 	return (sock);
 }
 
-t_client		*login_server(int sock)
+t_client			*login_server(int sock)
 {
-	int		count;
-	char		buffer[BUFSIZE];
-	char		**cmd;
-	t_client	*c;
+	int			count;
+	char			buffer[BUFSIZE];
+	char			**cmd;
+	t_client		*c;
 
 	count = 0;
 	c = (t_client *) malloc(sizeof(t_client));
@@ -49,14 +50,14 @@ t_client		*login_server(int sock)
 	my_putstr("Votre login: ");
 	while ((count = read(0, buffer, BUFSIZE)) < 2)
 		my_putstr("Votre login: ");
-	cmd[0] = LOGIN_CMD;
-	cmd[1] = (char *) malloc(count - 1 * sizeof(char));
-	my_strncpy(cmd[1], buffer, count - 1);
+	cmd[CMD_INDEX] = LOGIN_CMD;
+	cmd[LOGIN_INDEX] = (char *) malloc(count - 1 * sizeof(char));
+	my_strncpy(cmd[LOGIN_INDEX], buffer, count - 1);
 	c->name = (char *) malloc(count * sizeof(char));
 	c->channel = (char *) malloc(my_strlen("general") * sizeof(char));
 	my_memset(buffer, 0x0, 132);
 	my_strcpy(buffer, my_implode(cmd, ';'));
-	PRINT_STR("Login as: ", cmd[1], "\nPlease wait ...");
+	PRINT_STR("Login as: ", cmd[LOGIN_INDEX], "\nPlease wait ...");
 	send(sock, buffer, my_strlen(buffer), 0);
 	my_memset(buffer, 0x0, 132);
 	count = recv(sock, buffer, 132, 0);
@@ -66,58 +67,58 @@ t_client		*login_server(int sock)
 		return (0x0);
 	}
 	c->fd = sock;
-	my_strncpy(c->name, cmd[1], my_strlen(cmd[1]));
+	my_strncpy(c->name, cmd[LOGIN_INDEX], my_strlen(cmd[LOGIN_INDEX]));
 	c->channel = "general";
 	free(cmd);
 	return (c);
 }
 
-int		handle_incoming(t_client *clt, char *raw)
+int				handle_incoming(t_client *clt, char *raw)
 {
 	(void) clt;
 	(void) raw;
 	return (0);
 }
 
-int		send_msg(t_client *clt, char *raw)
+int				send_msg(t_client *clt, char *raw)
 {
-	char	**cmd;
-	char	*req;
+	char			**cmd;
+	char			*req;
 
 	req = 0x0;
 	cmd = (char **) malloc(4 * sizeof(char *));
 	if (!cmd)
 		return (-1);
-	cmd[0] = "msg";
-	cmd[1] = clt->name;
-	cmd[2] = clt->channel;
-	cmd[3] = raw;
+	cmd[CMD_INDEX] = "msg";
+	cmd[LOGIN_INDEX] = clt->name;
+	cmd[CHANNEL_INDEX] = clt->channel;
+	cmd[MSG_INDEX] = raw;
 	req = my_implode(cmd, ';');
 	return (send(clt->fd, req, my_strlen(req), 0));
 }
 
-int		rcv_msg(char *msg)
+int				rcv_msg(char *msg)
 {
-	char	**cmd;
+	char			**cmd;
 
 	cmd = my_explode(msg, ';');
 	if (!cmd)
 		return (0);
 	my_putchar('\n');
-	CMD_PROMPT(cmd[2], cmd[1]);
-	write(1, cmd[3], my_strlen(cmd[3]));
+	INCOMING_PROMPT(cmd[LOGIN_INDEX], cmd[CHANNEL_INDEX]);
+	write(1, cmd[MSG_INDEX], my_strlen(cmd[MSG_INDEX]));
 	my_putchar('\n');
 	free(cmd);
 	return (1);
 }
 
-void		main_client(t_client *clt)
+void				main_client(t_client *clt)
 {
-	int s;
-	int run;
-	int readed;
-	char msg[BUFSIZE];
-	fd_set rfds;
+	int			s;
+	int			run;
+	int			readed;
+	char			msg[BUFSIZE];
+	fd_set			rfds;
 
 	s = -1;
 	run = 1;
@@ -128,7 +129,7 @@ void		main_client(t_client *clt)
 		FD_SET(0, &rfds);
 		FD_SET(clt->fd, &rfds);
 		my_memset(msg, 0x0, BUFSIZE);
-		CMD_PROMPT(clt->channel, clt->name);
+		CMD_PROMPT(clt->name, clt->channel);
 		s = select(clt->fd + 1, &rfds, 0x0, 0x0, 0x0);
 		if (s < 0)
 			run = 0;
@@ -139,12 +140,13 @@ void		main_client(t_client *clt)
 				run = 0;
 			if (!my_strncmp("quit", msg, 4))
 				run = 0;
+			*(msg + readed - 1) = 0x0;
 			send_msg(clt, msg);
 		}
 		else if (FD_ISSET(clt->fd, &rfds))
 		{
 			readed = recv(clt->fd, msg, BUFSIZE, 0);
-			if (!readed)
+			if (readed <= 0)
 				run = 0;
 			rcv_msg(msg);
 		}

@@ -1,25 +1,46 @@
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
-#include<unistd.h>
-#include<arpa/inet.h>
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<sys/select.h>
+#include		<unistd.h>
+#include		<arpa/inet.h>
+#include		<sys/types.h>
+#include		<sys/socket.h>
+#include		<sys/select.h>
+
+#include		<utils.h>
 
 #define LOGIN_CMD       "login"
 #define MSG_SEND_CMD    "send_msg"
 #define MSG_RECV_CMD    "recv_msg"
 #define CHANNEL_CMD     "channel"
 
+#define	CMD_INDEX	0
+#define	LOGIN_INDEX	1
+#define	CHANNEL_INDEX	2
+#define	MSG_INDEX	3
+
+
 #define	BUFSIZE		512
 
-#define	CMD_PROMPT(chan, login)	\
+
+
+#define	CMD_PROMPT(login, chan) \
+my_putstr(RED); \
 	my_putstr("my_slack # "); \
 	my_putstr(login); \
 	my_putchar('@'); \
 	my_putstr(chan); \
-	my_putstr(" > ");
+	my_putstr(" > "); \
+	my_putstr(RESET);
+
+#define	INCOMING_PROMPT(login, chan) \
+	my_putstr(CYAN); \
+	my_putstr("my_slack # "); \
+	my_putstr(login); \
+	my_putchar('@'); \
+	my_putstr(chan); \
+	my_putstr(" > "); \
+	my_putstr(RESET);
 
 typedef struct	s_client
 {

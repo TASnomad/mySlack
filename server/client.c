@@ -1,7 +1,7 @@
-#include <client.h>
-#include <srv.h>
-#include <libmy.h>
-#include <stdlib.h>
+#include	<client.h>
+#include	<srv.h>
+#include	<libmy.h>
+#include	<stdlib.h>
 
 t_client        *create_client(int sock, char *name, char *channel)
 {

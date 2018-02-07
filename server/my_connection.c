@@ -12,7 +12,7 @@ int						prepare_srv_socket(char *port)
 {
 	int					srv_socket;
 	int					opts;
-	struct sockaddr_in	srv;
+	struct sockaddr_in			srv;
 
 	srv_socket = -1;
 	opts = 1;
@@ -41,14 +41,14 @@ int 					read_socket_data(int sock, char *buffer)
 
 void 					main_server(int srv, int max_listen)
 {
-	fd_set actives;
-	fd_set readfds;
-	int new_clt;
-	int j;
-	int len, rcv;
-	char buffer[1024];
-	struct sockaddr_in	client;
-	t_client	*clt;
+	fd_set				actives;
+	fd_set				readfds;
+	int 				new_clt;
+	int 				j;
+	int 				len, rcv;
+	char 				buffer[1024];
+	struct sockaddr_in		client;
+	t_client			*clt;
 
 	init_clients(&clients);
 	my_memset((void *) &client, 0x0, sizeof(client));
