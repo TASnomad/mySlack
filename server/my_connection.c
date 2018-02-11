@@ -63,7 +63,7 @@ void 					main_server(int srv, int max_listen)
 		my_memset((void *) buffer, 0x0, 1024);
 		my_memset((void *) &client, 0x0, sizeof(client));
 		if (select(FD_SETSIZE, &readfds, 0x0, 0x0, 0x0) < 0)
-			return (my_putstr("Noooo, select call is fucked up !\n"));
+			return (my_putstr("select() call error !\n"));
 		for (j = 0; j < FD_SETSIZE; ++j)
 		{
 			if (FD_ISSET(j, &readfds))
@@ -73,7 +73,7 @@ void 					main_server(int srv, int max_listen)
 					new_clt = accept(srv, (struct sockaddr *) &client, (socklen_t *) &len);
 					if (new_clt < 0)
 						return (my_putstr("Server is full !\n"));
-					PRINT_STR("Client: ", inet_ntoa(client.sin_addr))
+					PRINT_STR("[CONNEXION] client: ", inet_ntoa(client.sin_addr))
 					FD_SET(new_clt, &actives);
 					clt = create_client(new_clt, 0x0, 0x0);
 					if (clt)
@@ -85,7 +85,11 @@ void 					main_server(int srv, int max_listen)
 					if (rcv <= 0)
 					{
 						clt = find_client_by_sock(clients, j);
-						PRINT_STR("Closing socket: ", clt->name);
+						if (clt->name) {
+							PRINT_STR("[CLOSE] client: ", clt->name);
+						} else {
+							PRINT_NBR("[CLOSE] anonymous client (socket): ", j);
+						}
 						rmv_client(clients, clt);
 						close(j);
 						FD_CLR(j, &actives);
