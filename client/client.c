@@ -28,7 +28,7 @@ int				spawn_client(char *ip, char *port)
 		return (-1);
 	if (connect(sock, (struct sockaddr *) &target, sizeof(struct sockaddr_in)) < 0)
 	{
-		my_putstr("Can\'t connect to the give server !\n");
+		my_putstr("Can\'t connect to the gived server !\n");
 		close(sock);
 		return (-1);
 	}
