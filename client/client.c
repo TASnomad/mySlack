@@ -50,6 +50,8 @@ t_client			*login_server(int sock)
 	my_putstr("Votre login: ");
 	while ((count = read(0, buffer, BUFSIZE)) < 2)
 		my_putstr("Votre login: ");
+	if (count <= 0)
+		return (0x0);
 	cmd[CMD_INDEX] = LOGIN_CMD;
 	cmd[LOGIN_INDEX] = (char *) malloc(count - 1 * sizeof(char));
 	my_strncpy(cmd[LOGIN_INDEX], buffer, count - 1);
