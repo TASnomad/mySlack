@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	sock = prepare_srv_socket(*(argv + 1));
 	if (sock < 0)
 		return (-1);
-	my_putstr("[*] TCP server is running ...\n");
+	my_putstr("[*] TCP server is running ... Waiting for users\n");
 	main_server(sock, 42);
 	close(sock);
 	return (0);

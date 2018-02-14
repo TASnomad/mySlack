@@ -102,7 +102,8 @@ int				send_msg(t_client *clt, char *raw)
 int				rcv_msg(char *msg)
 {
 	char			**cmd;
-
+	if (!msg)
+	  return 0;
 	cmd = my_explode(msg, ';');
 	if (!cmd)
 		return (0);
