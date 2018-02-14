@@ -7,8 +7,8 @@
 
 
 t_action    actions[] = {
-    { "login", handle_login },
-    { "msg", handle_new_msg },
+    { CMD_LOGIN, handle_login },
+    { CMD_MSG, handle_new_msg },
     { 0x0, 0x0 }
 };
 
@@ -65,20 +65,13 @@ int             handle_login(int sock, char *buff)
     return (!res);
 }
 
-int             handle_new_msg(int sock, char *raw, int raw_size)
+int             handle_new_msg(int sock, char *raw)
 {
     char        **cmd;
-    char        *response;
    
     cmd = my_explode(raw, ';');
     broadcast_to_channel(sock, raw);
     free(cmd);
-
-    (void) response;
-    (void) sock;
-    (void) raw;
-    (void) raw_size;
-    (void) cmd;
     return (1);
 }
 

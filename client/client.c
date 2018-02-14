@@ -111,7 +111,10 @@ void				main_client(t_client *clt)
 		{
 			readed = recv(clt->fd, msg, BUFSIZE, 0);
 			if (readed <= 0)
+			{
 				run = 0;
+				continue;
+			}
 			handle_incoming(clt, msg);
 			//rcv_msg(msg);
 		}

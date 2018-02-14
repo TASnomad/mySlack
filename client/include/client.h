@@ -9,17 +9,18 @@
 
 #include		<utils.h>
 
+#define	EXPLODE_CHAR	';'
+
 #define LOGIN_CMD       "login"
 #define	RCV_MSG_CMD	"msg"
+#define	LIST_CMD	"list"
 
 #define	CMD_INDEX	0
 #define	LOGIN_INDEX	1
 #define	CHANNEL_INDEX	2
 #define	MSG_INDEX	3
 
-
 #define	BUFSIZE		512
-
 
 #define	CMD_PROMPT(login, chan) \
 my_putstr(RED); \
