@@ -1,5 +1,6 @@
 #include	<libmy.h>
 #include	<utils.h>
+#include	<actions.h>
 #include	<client.h>
 #include	<stdlib.h>
 #include	<errno.h>
@@ -75,45 +76,6 @@ t_client			*login_server(int sock)
 	return (c);
 }
 
-int				handle_incoming(t_client *clt, char *raw)
-{
-	(void) clt;
-	(void) raw;
-	return (0);
-}
-
-int				send_msg(t_client *clt, char *raw)
-{
-	char			**cmd;
-	char			*req;
-
-	req = 0x0;
-	cmd = (char **) malloc(4 * sizeof(char *));
-	if (!cmd)
-		return (-1);
-	cmd[CMD_INDEX] = "msg";
-	cmd[LOGIN_INDEX] = clt->name;
-	cmd[CHANNEL_INDEX] = clt->channel;
-	cmd[MSG_INDEX] = raw;
-	req = my_implode(cmd, ';');
-	return (send(clt->fd, req, my_strlen(req), 0));
-}
-
-int				rcv_msg(char *msg)
-{
-	char			**cmd;
-
-	cmd = my_explode(msg, ';');
-	if (!cmd)
-		return (0);
-	my_putchar('\n');
-	INCOMING_PROMPT(cmd[LOGIN_INDEX], cmd[CHANNEL_INDEX]);
-	write(1, cmd[MSG_INDEX], my_strlen(cmd[MSG_INDEX]));
-	my_putchar('\n');
-	free(cmd);
-	return (1);
-}
-
 void				main_client(t_client *clt)
 {
 	int			s;
@@ -150,7 +112,8 @@ void				main_client(t_client *clt)
 			readed = recv(clt->fd, msg, BUFSIZE, 0);
 			if (readed <= 0)
 				run = 0;
-			rcv_msg(msg);
+			handle_incoming(clt, msg);
+			//rcv_msg(msg);
 		}
 	}
 	my_putstr("Déconnexion du serveur !!\n");

@@ -3,10 +3,11 @@ CFLAGS =	-Wall -Werror -Wextra -I./include -g2
 LDFLAGS =	-L./libmy -lmy
 NAME =		my_slack_clt
 SRC =		my_memset.c \
-			my_implode.c \
-			my_explode.c \
-			client.c \
-			main.c
+		my_implode.c \
+		my_explode.c \
+		actions.c \
+		client.c \
+		main.c
 LIB_NAME =	libmy.a
 OBJS =		$(SRC:%.c=%.o)
 RM =		rm -f

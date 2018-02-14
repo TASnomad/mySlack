@@ -10,9 +10,7 @@
 #include		<utils.h>
 
 #define LOGIN_CMD       "login"
-#define MSG_SEND_CMD    "send_msg"
-#define MSG_RECV_CMD    "recv_msg"
-#define CHANNEL_CMD     "channel"
+#define	RCV_MSG_CMD	"msg"
 
 #define	CMD_INDEX	0
 #define	LOGIN_INDEX	1
@@ -21,7 +19,6 @@
 
 
 #define	BUFSIZE		512
-
 
 
 #define	CMD_PROMPT(login, chan) \
@@ -50,7 +47,7 @@ typedef struct	s_client
 }		t_client;
 
 int		spawn_client(char *, char *);
-int		send_msg(t_client *, char *);
+//int		send_msg(t_client *, char *);
 t_client	*login_server(int);
 void		main_client(t_client *);
 
