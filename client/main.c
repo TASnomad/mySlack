@@ -1,7 +1,8 @@
-#include <libmy.h>
-#include <client.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include	<libmy.h>
+#include	<utils.h>
+#include	<client.h>
+#include	<unistd.h>
+#include	<stdlib.h>
 
 #define PRINT_STR(prefix, variable, suffix) \
 	my_putstr(prefix); \
@@ -31,11 +32,10 @@ int 		main(int argc, char **argv)
 		my_putstr("Login process, abort now !\n");
 		return (-1);
 	}
-	my_putstr("Connected to the server !\n");
+	my_putstr(CLEAR);
+	PRINT_STR(YELLOW, "Connected to the server !\n", RESET);
 	main_client(clt);
 	close(clt->fd);
-	//free(clt->name);
-	//free(clt->channel);
 	free(clt);
 	return (0);
 }
