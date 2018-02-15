@@ -1,3 +1,13 @@
+/*
+** main.c for MySlack in /home/nomad/mySlack/client
+** 
+** Made by BARREAU Martin
+** Login   <barrea_m@etna-alternance.net>
+** 
+** Started on  Thu Feb 15 10:31:05 2018 BARREAU Martin
+** Last update Thu Feb 15 10:31:16 2018 BARREAU Martin
+*/
+
 #include	<libmy.h>
 #include	<utils.h>
 #include	<client.h>
