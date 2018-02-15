@@ -71,13 +71,23 @@ void 					main_server(int srv, int max_listen)
 				if (j == srv)
 				{
 					new_clt = accept(srv, (struct sockaddr *) &client, (socklen_t *) &len);
-					if (new_clt < 0)
-						return (my_putstr("Server is full !\n"));
+					if (new_clt < 0 || clients->nb_elem >= MAX_CLIENTS)
+					{
+						my_putstr("[WARNING] Server is full !\n");
+						close(new_clt);
+						continue;
+					}
 					PRINT_STR("[CONNEXION] client: ", inet_ntoa(client.sin_addr))
 					FD_SET(new_clt, &actives);
 					clt = create_client(new_clt, 0x0, 0x0);
 					if (clt)
 						add_client(clients, clt);
+					else
+					{
+						PRINT_NBR("[WARNING] closing connection : ", new_clt);
+						my_putstr("\nError while creating client !\n");
+						close(new_clt);
+					}
 				}
 				else
 				{
@@ -95,9 +105,7 @@ void 					main_server(int srv, int max_listen)
 						FD_CLR(j, &actives);
 					}
 					else
-					{
 						handle_incoming(j, buffer, rcv);
-					}
 				}
 			}
 		}
