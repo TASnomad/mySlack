@@ -30,7 +30,7 @@ int		main(int argc, char **argv)
   if (sock < 0)
     return (-1);
   my_putstr("[*] TCP server is running ...\n");
-  main_server(sock, 42);
+  main_server(sock);
   close(sock);
   return (0);
 }

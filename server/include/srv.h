@@ -14,7 +14,7 @@
 	my_putchar('\n');
 
 int	prepare_srv_socket(char *);
-void	main_server(int, int);
+void	main_server(int);
 int	read_socket_data(int, char *);
 
 #endif /* _SRV_H_ */

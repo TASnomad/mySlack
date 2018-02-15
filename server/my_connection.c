@@ -39,7 +39,7 @@ int 					read_socket_data(int sock, char *buffer)
 	return (recv(sock, buffer, 1024, 0));
 }
 
-void 					main_server(int srv, int max_listen)
+void 					main_server(int srv)
 {
 	fd_set				actives;
 	fd_set				readfds;
@@ -53,7 +53,7 @@ void 					main_server(int srv, int max_listen)
 	init_clients(&clients);
 	my_memset((void *) &client, 0x0, sizeof(client));
 	len = sizeof(socklen_t);
-	if (listen(srv, max_listen) < 0)
+	if (listen(srv, FD_SETSIZE) < 0)
 		return (my_putstr("Server can\'t listen on selected port !\nAbort now !\n"));
 	FD_ZERO(&actives);
 	FD_SET(srv, &actives);

@@ -10,7 +10,7 @@
 #define	CMD_LIST	"list"
 #define	CMD_QUIT	"quit"
 
-#define	MAX_CLIENTS	FDSETSIZE
+#define	MAX_CLIENTS	FD_SETSIZE
 
 typedef	struct		s_action
 {
