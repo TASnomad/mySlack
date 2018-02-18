@@ -1,3 +1,13 @@
+##
+## Makefile for MySlack in /home/nomad/mySlack/client
+## 
+## Made by BARREAU Martin
+## Login   <barrea_m@etna-alternance.net>
+## 
+## Started on  Sun Feb 18 22:29:20 2018 BARREAU Martin
+## Last update Sun Feb 18 23:05:42 2018 BARREAU Martin
+##
+
 CC = 		gcc
 CFLAGS =	-Wall -Werror -Wextra -I./include -g2
 LDFLAGS =	-L./libmy -lmy
@@ -6,6 +16,7 @@ SRC =		my_memset.c \
 		my_implode.c \
 		my_explode.c \
 		actions.c \
+		cmd.c \
 		client.c \
 		main.c
 LIB_NAME =	libmy.a

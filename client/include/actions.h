@@ -1,3 +1,13 @@
+/*
+** actions.h for MySlack in /home/nomad/mySlack/client/include
+** 
+** Made by BARREAU Martin
+** Login   <barrea_m@etna-alternance.net>
+** 
+** Started on  Sun Feb 18 22:39:00 2018 BARREAU Martin
+** Last update Sun Feb 18 22:40:05 2018 BARREAU Martin
+*/
+
 #ifndef	_ACTIONS_H_
 #define	_ACTIONS_H_
 
@@ -5,8 +15,8 @@
 
 typedef struct	s_action
 {
-	char	*name;
-	int	(*cmd)();
+  char		*name;
+  int		(*cmd)();
 }		t_action;
 
 int		handle_incoming(t_client *, char *);
