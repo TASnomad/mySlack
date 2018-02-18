@@ -1,9 +1,19 @@
+/*
+** client.h for MySlack in /home/nomad/mySlack/server/include
+** 
+** Made by BARREAU Martin
+** Login   <barrea_m@etna-alternance.net>
+** 
+** Started on  Sun Feb 18 22:23:25 2018 BARREAU Martin
+** Last update Sun Feb 18 22:25:29 2018 BARREAU Martin
+*/
+
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
-#include	<sys/select.h>
+#include		<sys/select.h>
 
-#define DEFAULT_CHAN    "general"
+#define DEFAULT_CHAN	"general"
 
 #define	CMD_LOGIN	"login"
 #define	CMD_MSG		"msg"
@@ -14,27 +24,27 @@
 
 typedef	struct		s_action
 {
-	char		*name;
-	int		(*cmd)();
+  char			*name;
+  int			(*cmd)();
 }			t_action;
 
 typedef struct		s_client
 {
-	int             fd;
-	char            *name;
-	char            *channel;
-	struct s_client	*next;
-	struct s_client	*prev;
+  int			fd;
+  char			*name;
+  char			*channel;
+  struct s_client	*next;
+  struct s_client	*prev;
 }			t_client;
 
 typedef struct		s_list
 {
-	t_client        *first;
-	t_client        *last;
-	int             nb_elem;
+  t_client		*first;
+  t_client		*last;
+  int			 nb_elem;
 }			t_list;
 
-t_list	*clients;
+t_list			*clients;
 
 int			init_clients(t_list **);
 void			add_client(t_list *, t_client *);
