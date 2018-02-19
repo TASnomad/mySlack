@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:36:53 2018 BARREAU Martin
-** Last update Sun Feb 18 23:22:20 2018 BARREAU Martin
+** Last update Mon Feb 19 01:56:08 2018 BARREAU Martin
 */
 
 #include	<cmd.h>
@@ -14,6 +14,7 @@
 #include	<utils.h>
 #include	<libmy.h>
 #include	<unistd.h>
+#include	<stdlib.h>
 
 #define		DISCARD(el) ((void) el)
 
@@ -70,8 +71,12 @@ int		send_pm(t_client *clt, char *raw)
 
 int		req_list(t_client *clt, char *raw)
 {
-  DISCARD(clt);
+  char		*req;
+
   DISCARD(raw);
+  req = my_strdup(LIST_CMD";");
+  send(clt->fd, req, my_strlen(req), 0);
+  free(req);
   return (1);
 }
 

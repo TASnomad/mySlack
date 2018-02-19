@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:39:00 2018 BARREAU Martin
-** Last update Sun Feb 18 22:40:05 2018 BARREAU Martin
+** Last update Mon Feb 19 03:10:23 2018 BARREAU Martin
 */
 
 #ifndef	_ACTIONS_H_
@@ -21,6 +21,7 @@ typedef struct	s_action
 
 int		handle_incoming(t_client *, char *);
 int		send_msg(t_client *, char *);
+int		recv_list(t_client *, char *);
 int		recv_msg(t_client *, char *);
 
 #endif /* ! _ACTIONS_H_ */

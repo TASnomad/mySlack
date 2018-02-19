@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:20:27 2018 BARREAU Martin
-** Last update Sun Feb 18 22:22:52 2018 BARREAU Martin
+** Last update Mon Feb 19 23:31:21 2018 BARREAU Martin
 */
 
 #include	<client.h>
@@ -18,6 +18,7 @@
 
 t_action	actions[] = {
   { CMD_LOGIN, handle_login },
+  { CMD_LIST, handle_list },
   { CMD_MSG, handle_new_msg },
   { 0x0, 0x0 }
 };
@@ -81,6 +82,42 @@ int		handle_new_msg(int sock, char *raw)
   
   cmd = my_explode(raw, ';');
   broadcast_to_channel(sock, raw);
+  free(cmd);
+  return (1);
+}
+
+int		handle_list(int sock, char *raw)
+{
+  char		**cmd;
+  char		*builder;
+  char		*res;
+  char		**names;
+  int		i;
+  t_client	*base;
+
+  (void) raw;
+  i = 0;
+  names = cmd = 0x0;
+  builder = res = 0x0;
+  if (!(names = (char **) malloc((clients->nb_elem - 1) * sizeof(char *))))
+    return (0);
+  if (!(cmd = (char **) malloc(2 * sizeof(char *))))
+    return (0);
+  base = clients->first;
+  while (clients->first)
+    {
+      *(names + i) = my_strdup(clients->first->name);
+      clients->first = clients->first->next;
+      i++;
+    }
+  builder = my_implode(names, '/');
+  clients->first = base;
+  *(cmd + 0) = CMD_LIST;
+  *(cmd + 1) = builder;
+  res = my_implode(cmd, ';');
+  send(sock, res, my_strlen(res), 0);
+  free(res);
+  free(builder);
   free(cmd);
   return (1);
 }

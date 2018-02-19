@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:51:30 2018 BARREAU Martin
-** Last update Sun Feb 18 22:51:31 2018 BARREAU Martin
+** Last update Mon Feb 19 23:36:19 2018 BARREAU Martin
 */
 
 #include			<client.h>
@@ -17,6 +17,7 @@
 
 t_action			my_actions[] = {
   { RCV_MSG_CMD, recv_msg },
+  { LIST_CMD, recv_list },
   { 0x0, 0x0 }
 };
 
@@ -59,6 +60,29 @@ int				send_msg(t_client *clt, char *raw)
   cmd[MSG_INDEX] = raw;
   req = my_implode(cmd, ';');
   return (send(clt->fd, req, my_strlen(req), 0));
+}
+
+int				recv_list(t_client *clt, char *msg)
+{
+  char				**cmd;
+  char				**names;
+  int				i;
+  
+  (void) clt;
+  i = 0;
+  cmd = my_explode(msg, EXPLODE_CHAR);
+  names = my_explode(*(cmd + 1), '/');
+  my_putstr(RED"Connected users:\n"RESET);
+  while (*(names + i))
+    {
+      my_putstr(YELLOW"- ");
+      my_putstr(*(names +i));
+      my_putstr("\n"RESET);
+      i += 1;
+    }
+  free(names);
+  free(cmd);
+  return (1);
 }
 
 int				recv_msg(t_client *clt, char *msg)
