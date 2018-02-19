@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:23:25 2018 BARREAU Martin
-** Last update Sun Feb 18 22:25:29 2018 BARREAU Martin
+** Last update Mon Feb 19 23:45:13 2018 BARREAU Martin
 */
 
 #ifndef _CLIENT_H_
@@ -56,10 +56,9 @@ t_client		*find_client_by_sock(t_list *, int);
 int			handle_login();
 int			handle_new_msg();
 int			handle_list();
+int			handle_quit();
+
 int			is_login_taken(t_list *, char *);
-
-void			print_clients(t_list *);
-
 int			handle_incoming(int, char *, int);
 
 #endif /* ! _CLIENT_H_ */

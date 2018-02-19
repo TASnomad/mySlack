@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:51:30 2018 BARREAU Martin
-** Last update Mon Feb 19 23:36:19 2018 BARREAU Martin
+** Last update Tue Feb 20 00:04:44 2018 BARREAU Martin
 */
 
 #include			<client.h>
@@ -18,15 +18,29 @@
 t_action			my_actions[] = {
   { RCV_MSG_CMD, recv_msg },
   { LIST_CMD, recv_list },
+  { QUIT_CMD, recv_quit },
   { 0x0, 0x0 }
 };
 
+int				recv_quit(t_client *clt, char *raw)
+{
+  char				**cmd;
+
+  (void) clt;
+  cmd = my_explode(raw, ';');
+  my_putstr("\n[INFO]"GREEN);
+  my_putstr(*(cmd + 1));
+  my_putstr(" quit the server !\n"RESET);
+  free(cmd);
+  return (1);
+}
+
 int				handle_incoming(t_client *clt, char *raw)
 {
-  char			**cmd;
-  int			found;
-  int			i;
-  int			res;
+  char				**cmd;
+  int				found;
+  int				i;
+  int				res;
   
   i = found = res = 0;
   cmd = my_explode(raw, ';');

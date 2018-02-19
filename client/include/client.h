@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:37:16 2018 BARREAU Martin
-** Last update Sun Feb 18 22:38:47 2018 BARREAU Martin
+** Last update Mon Feb 19 23:58:43 2018 BARREAU Martin
 */
 
 #ifndef _CLIENT_H_
@@ -23,6 +23,7 @@
 #define LOGIN_CMD       "login"
 #define	RCV_MSG_CMD	"msg"
 #define	LIST_CMD	"list"
+#define	QUIT_CMD	"quit"
 
 #define	CMD_INDEX	0
 #define	LOGIN_INDEX	1

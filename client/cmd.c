@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:36:53 2018 BARREAU Martin
-** Last update Mon Feb 19 01:56:08 2018 BARREAU Martin
+** Last update Tue Feb 20 00:12:26 2018 BARREAU Martin
 */
 
 #include	<cmd.h>
@@ -82,7 +82,17 @@ int		req_list(t_client *clt, char *raw)
 
 int		handle_quit(t_client *clt, char *raw)
 {
-  close(clt->fd);
+  char		**cmd;
+  char		*req;
+
   DISCARD(raw);
+  if (!(cmd = (char **) malloc(2 * sizeof(char **))))
+    return (0);
+  *(cmd + 0) = my_strdup(QUIT_CMD);
+  *(cmd + 1) = my_strdup(clt->name);
+  req = my_implode(cmd, ';');
+  send(clt->fd, req, my_strlen(req), 0);
+  free(req);
+  free(cmd);
   return (0);
 }

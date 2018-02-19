@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:20:27 2018 BARREAU Martin
-** Last update Mon Feb 19 23:31:21 2018 BARREAU Martin
+** Last update Tue Feb 20 00:06:03 2018 BARREAU Martin
 */
 
 #include	<client.h>
@@ -19,6 +19,7 @@
 t_action	actions[] = {
   { CMD_LOGIN, handle_login },
   { CMD_LIST, handle_list },
+  { CMD_QUIT, handle_quit },
   { CMD_MSG, handle_new_msg },
   { 0x0, 0x0 }
 };
@@ -44,6 +45,25 @@ void		broadcast_to_channel(int sender, char *msg)
       clients->first = clients->first->next;
     }
   clients->first = base;
+}
+
+int		handle_quit(int sock, char *raw)
+{
+  char		**cmd;
+  char		*res;
+  t_client	*clt;
+
+  (void) raw;
+  clt = find_client_by_sock(clients, sock);
+  if (!(cmd = (char **) malloc(2 * sizeof(char *))))
+    return (0);
+  *(cmd + 0) = my_strdup(CMD_QUIT);
+  *(cmd + 1) = my_strdup(clt->name);
+  res = my_implode(cmd, ';');
+  broadcast_to_channel(sock, res);
+  free(res);
+  free(cmd);
+  return (1);
 }
 
 int		handle_login(int sock, char *buff)
