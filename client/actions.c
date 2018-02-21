@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:51:30 2018 BARREAU Martin
-** Last update Tue Feb 20 00:04:44 2018 BARREAU Martin
+** Last update Wed Feb 21 15:24:42 2018 BARREAU Martin
 */
 
 #include			<client.h>
@@ -48,7 +48,7 @@ int				handle_incoming(t_client *clt, char *raw)
     return (0);
   while ((*(my_actions + i)).name && !found)
     {
-      if (my_strcmp(cmd[CMD_INDEX], (*(my_actions + i)).name) == 0)
+      if (my_strncmp(cmd[CMD_INDEX], (*(my_actions + i)).name, my_strlen(cmd[CMD_INDEX])) == 0)
 	{
 	  res = (*(my_actions +i)).cmd(clt, raw);
 	  found = 1;
@@ -86,7 +86,7 @@ int				recv_list(t_client *clt, char *msg)
   i = 0;
   cmd = my_explode(msg, EXPLODE_CHAR);
   names = my_explode(*(cmd + 1), '/');
-  my_putstr(RED"Connected users:\n"RESET);
+  my_putstr(CYAN"\nConnected users:\n"RESET);
   while (*(names + i))
     {
       my_putstr(YELLOW"- ");

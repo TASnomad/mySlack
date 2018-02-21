@@ -5,11 +5,11 @@
 ## Login   <barrea_m@etna-alternance.net>
 ## 
 ## Started on  Sun Feb 18 22:29:20 2018 BARREAU Martin
-## Last update Sun Feb 18 23:05:42 2018 BARREAU Martin
+## Last update Wed Feb 21 15:15:10 2018 BARREAU Martin
 ##
 
 CC = 		gcc
-CFLAGS =	-Wall -Werror -Wextra -I./include -g2
+CFLAGS =	-Wall -Werror -Wextra -I./include -g3
 LDFLAGS =	-L./libmy -lmy
 NAME =		my_slack_clt
 SRC =		my_memset.c \

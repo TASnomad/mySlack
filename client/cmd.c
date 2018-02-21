@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:36:53 2018 BARREAU Martin
-** Last update Tue Feb 20 00:12:26 2018 BARREAU Martin
+** Last update Wed Feb 21 15:31:39 2018 BARREAU Martin
 */
 
 #include	<cmd.h>
@@ -36,6 +36,7 @@ int		handle_cmd(t_client *clt, char *raw)
   while ((*(cmds + i)).name && !found)
     {
       if (!my_strncmp(raw, (*(cmds + i)).name, my_strlen((*(cmds + i)).name)))
+      //if (!my_strncmp(raw, (*(cmds + i)).name, my_strlen((*(cmds + i)).name)))
 	{
 	  res = (*(cmds + i)).cmd(clt, raw);
 	  found = 1;

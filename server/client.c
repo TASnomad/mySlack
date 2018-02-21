@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:17:49 2018 BARREAU Martin
-** Last update Sun Feb 18 22:20:02 2018 BARREAU Martin
+** Last update Wed Feb 21 09:28:47 2018 BARREAU Martin
 */
 
 #include	<client.h>
@@ -126,6 +126,7 @@ void		rmv_client(t_list *list, t_client *clt)
 	}
     }
   free(clt->name);
+
   list->first = base;
   list->nb_elem--;
 }

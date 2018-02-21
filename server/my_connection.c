@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:12:16 2018 BARREAU Martin
-** Last update Sun Feb 18 22:15:33 2018 BARREAU Martin
+** Last update Wed Feb 21 16:24:03 2018 BARREAU Martin
 */
 
 #include		<unistd.h>
@@ -116,7 +116,7 @@ void			main_server(int srv)
 		      FD_CLR(j, &actives);
 		    }
 		  else
-		    handle_incoming(j, buffer, rcv);
+		    handle_incoming(j, my_strdup(buffer), rcv);
 		}
 	    }
 	}

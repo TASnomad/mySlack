@@ -5,10 +5,11 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:20:27 2018 BARREAU Martin
-** Last update Tue Feb 20 00:06:03 2018 BARREAU Martin
+** Last update Wed Feb 21 16:23:33 2018 BARREAU Martin
 */
 
 #include	<client.h>
+#include	<utils.h>
 #include	<srv.h>
 #include	<libmy.h>
 #include	<stdlib.h>
@@ -61,8 +62,10 @@ int		handle_quit(int sock, char *raw)
   *(cmd + 1) = my_strdup(clt->name);
   res = my_implode(cmd, ';');
   broadcast_to_channel(sock, res);
-  free(res);
+  free(*(cmd + 0));
+  free(*(cmd + 1));
   free(cmd);
+  free(res);
   return (1);
 }
 
@@ -71,13 +74,16 @@ int		handle_login(int sock, char *buff)
   char		**cmd;
   char		*response;
   int		res;
+  int		i;
   t_client	*clt;
 
+  i = 0;
   cmd = my_explode(buff, ';');
   res = is_login_taken(clients, cmd[1]);
   if (res)
     {
-      free(cmd[1]);
+      if (cmd[1])
+	free(cmd[1]);
       cmd[1] = my_strdup("KO");
     }
   else
@@ -86,22 +92,37 @@ int		handle_login(int sock, char *buff)
       if (clt->name)
             free(clt->name);
       clt->name = my_strdup(cmd[1]);
-      free(cmd[1]);
+      //free(cmd[1]);
       cmd[1] = my_strdup("OK");
     }
-  response = my_implode(cmd, ';');
+  response = my_strdup(my_implode(cmd, ';'));
   send(sock, response, my_strlen(response), 0);
   free(response);
+  while (*(cmd + i))
+    {
+      free(*(cmd + i));
+      i += 1;
+    }
   free(cmd);
   return (!res);
 }
 
 int		handle_new_msg(int sock, char *raw)
 {
+  int		i;
+  int		len;
   char		**cmd;
-  
+
+  i = 0;
+  len = 0;
   cmd = my_explode(raw, ';');
+  while (cmd[++i]);
   broadcast_to_channel(sock, raw);
+  while (i < len)
+    {
+      free(*(cmd + i));
+      i += 1;
+    }
   free(cmd);
   return (1);
 }
@@ -110,8 +131,8 @@ int		handle_list(int sock, char *raw)
 {
   char		**cmd;
   char		*builder;
-  char		*res;
   char		**names;
+  char		*res;
   int		i;
   t_client	*base;
 
@@ -132,12 +153,14 @@ int		handle_list(int sock, char *raw)
     }
   builder = my_implode(names, '/');
   clients->first = base;
-  *(cmd + 0) = CMD_LIST;
-  *(cmd + 1) = builder;
-  res = my_implode(cmd, ';');
+  *(cmd + 0) = my_strdup(CMD_LIST);
+  *(cmd + 1) = my_strdup(builder);
+  res = my_strdup(my_implode(cmd, ';'));
   send(sock, res, my_strlen(res), 0);
   free(res);
   free(builder);
+  free(cmd[0]);
+  free(cmd[1]);
   free(cmd);
   return (1);
 }
@@ -147,10 +170,12 @@ int		handle_incoming(int sock_clt, char *raw_buff, int raw_size)
   char		**cmd;
   int		found;
   int		i;
+  int		len;
   int		res;
   
-  i = found = res = 0;
-  cmd = my_explode(raw_buff, ';');
+  i = len = found = res = 0;
+  cmd = 0x0;
+  cmd = my_explode(my_strdup(raw_buff), ';');
   if (!cmd)
     return (0);
   while ((*(actions + i)).name && !found)
@@ -162,6 +187,13 @@ int		handle_incoming(int sock_clt, char *raw_buff, int raw_size)
         }
       i += 1;
     }
+  // while (cmd[++len]);
+  //i = 0;
+  /*while (i < len)
+    {
+      free(*(cmd + i));
+      i += 1;
+      }*/
   free(cmd);
   return (res);
 }

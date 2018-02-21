@@ -5,15 +5,13 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Thu Feb 15 10:31:56 2018 BARREAU Martin
-** Last update Thu Feb 15 10:33:29 2018 BARREAU Martin
+** Last update Wed Feb 21 09:27:19 2018 BARREAU Martin
 */
 
 #include	<libmy.h>
 #include 	<srv.h>
 #include 	<unistd.h>
 #include 	<stdlib.h>
-
-#define		LEN(x, arr) while(arr[++x]);
 
 int		main(int argc, char **argv)
 {
