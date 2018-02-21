@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:20:27 2018 BARREAU Martin
-** Last update Wed Feb 21 16:23:33 2018 BARREAU Martin
+** Last update Wed Feb 21 19:44:59 2018 BARREAU Martin
 */
 
 #include	<client.h>
@@ -19,7 +19,7 @@
 
 t_action	actions[] = {
   { CMD_LOGIN, handle_login },
-  { CMD_LIST, handle_list },
+  //{ CMD_LIST, handle_list },
   { CMD_QUIT, handle_quit },
   { CMD_MSG, handle_new_msg },
   { 0x0, 0x0 }
@@ -38,11 +38,6 @@ void		broadcast_to_channel(int sender, char *msg)
     {
       if (clients->first->fd != clt->fd)
 	send(clients->first->fd, msg, my_strlen(msg), 0);
-      //if (clients->first->channel) {
-      //if ((my_strncmp(clt->channel, clients->first->channel, my_strlen(clt->channel))) == 0) {
-      //	    send(clients->first->fd, msg, my_strlen(msg), 0);
-      //   }
-      //}
       clients->first = clients->first->next;
     }
   clients->first = base;
@@ -81,18 +76,13 @@ int		handle_login(int sock, char *buff)
   cmd = my_explode(buff, ';');
   res = is_login_taken(clients, cmd[1]);
   if (res)
-    {
-      if (cmd[1])
-	free(cmd[1]);
       cmd[1] = my_strdup("KO");
-    }
   else
     {
       clt = find_client_by_sock(clients, sock);
       if (clt->name)
             free(clt->name);
       clt->name = my_strdup(cmd[1]);
-      //free(cmd[1]);
       cmd[1] = my_strdup("OK");
     }
   response = my_strdup(my_implode(cmd, ';'));
@@ -113,9 +103,10 @@ int		handle_new_msg(int sock, char *raw)
   int		len;
   char		**cmd;
 
+  PRINT_NBR("__Sock : ", sock);
   i = 0;
   len = 0;
-  cmd = my_explode(raw, ';');
+  cmd = my_explode(my_strdup(raw), ';');
   while (cmd[++i]);
   broadcast_to_channel(sock, raw);
   while (i < len)
@@ -140,7 +131,7 @@ int		handle_list(int sock, char *raw)
   i = 0;
   names = cmd = 0x0;
   builder = res = 0x0;
-  if (!(names = (char **) malloc((clients->nb_elem - 1) * sizeof(char *))))
+  if (!(names = (char **) malloc((clients->nb_elem) * sizeof(char *))))
     return (0);
   if (!(cmd = (char **) malloc(2 * sizeof(char *))))
     return (0);
@@ -168,32 +159,28 @@ int		handle_list(int sock, char *raw)
 int		handle_incoming(int sock_clt, char *raw_buff, int raw_size)
 {
   char		**cmd;
+  char		*data;
   int		found;
   int		i;
   int		len;
   int		res;
-  
+
   i = len = found = res = 0;
   cmd = 0x0;
-  cmd = my_explode(my_strdup(raw_buff), ';');
+  data = my_strdup(raw_buff);
+  cmd = my_explode(data, ';');
   if (!cmd)
     return (0);
   while ((*(actions + i)).name && !found)
     {
       if (my_strcmp(cmd[0], (*(actions + i)).name) == 0)
         {
-	  res = (*(actions + i)).cmd(sock_clt, raw_buff, raw_size);
+	  res = (*(actions + i)).cmd(sock_clt, data);
 	  found = 1;
         }
       i += 1;
     }
-  // while (cmd[++len]);
-  //i = 0;
-  /*while (i < len)
-    {
-      free(*(cmd + i));
-      i += 1;
-      }*/
+  my_memset(raw_buff, 0x0, raw_size);
   free(cmd);
   return (res);
 }

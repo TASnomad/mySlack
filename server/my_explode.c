@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Wed Feb 21 09:25:52 2018 BARREAU Martin
-** Last update Wed Feb 21 16:31:31 2018 BARREAU Martin
+** Last update Wed Feb 21 18:07:34 2018 BARREAU Martin
 */
 
 #include	<libmy.h>
@@ -24,6 +24,8 @@ char		*my_implode(char **arr, char del)
   i = len = arr_cont = 0;
   res = 0x0;
   LEN(arr_cont, arr);
+  if (!arr)
+    return (0x0);
   while (i < arr_cont)
     {
       len += my_strlen(arr[i]);

@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:17:49 2018 BARREAU Martin
-** Last update Wed Feb 21 09:28:47 2018 BARREAU Martin
+** Last update Wed Feb 21 17:51:08 2018 BARREAU Martin
 */
 
 #include	<client.h>
@@ -17,13 +17,15 @@ t_client	*create_client(int sock, char *name, char *channel)
 {
   t_client	*clt;
 
+  (void) channel;
   clt = (t_client *) malloc(sizeof(t_client *));
   if (!clt)
     return (0x0);
-  if (!channel)
+  clt->channel = my_strdup(DEFAULT_CHAN);
+  /*if (!channel)
     clt->channel = my_strdup(DEFAULT_CHAN);
   else
-    clt->channel = my_strdup(channel);
+  clt->channel = my_strdup(channel);*/
   clt->fd = sock;
   clt->name = (name) ? my_strdup(name) : 0x0;
   clt->next = 0x0;
@@ -125,8 +127,6 @@ void		rmv_client(t_list *list, t_client *clt)
 	      }
 	}
     }
-  free(clt->name);
-
   list->first = base;
   list->nb_elem--;
 }
