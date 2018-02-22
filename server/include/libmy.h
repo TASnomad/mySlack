@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 **
 ** Started on  Mon Nov  6 09:20:42 2017 BARREAU Martin
-** Last update Mon Nov  6 09:21:40 2017 BARREAU Martin
+** Last update Sun Feb 18 22:26:01 2018 BARREAU Martin
 */
 
 #ifndef _LIB_MY_H_
@@ -15,7 +15,7 @@
 ** project purpose functions
 */
 
-void    *my_memset(void *, int, int);
+void	*my_memset(void *, int, int);
 char	**my_explode(char *, char);
 char    *my_implode(char **, char);
 

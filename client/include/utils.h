@@ -8,5 +8,6 @@
 #define	MAGENTA	"\x1b[35m"
 #define	CYAN	"\x1b[36m"
 #define	RESET	"\x1b[0m"
+#define	CLEAR	"\e[1;H\e[2J"
 
 #endif /* ! _UTILS_H_ */
