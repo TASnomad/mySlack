@@ -1,11 +1,11 @@
 /*
 ** actions.c for MySlack in /home/nomad/mySlack/server
-** 
+**
 ** Made by BARREAU Martin
 ** Login   <barrea_m@etna-alternance.net>
-** 
+**
 ** Started on  Sun Feb 18 22:20:27 2018 BARREAU Martin
-** Last update Wed Feb 21 19:44:59 2018 BARREAU Martin
+** Last update Thu Feb 22 21:25:10 2018 BRIAND Corentin
 */
 
 #include	<client.h>
@@ -19,7 +19,7 @@
 
 t_action	actions[] = {
   { CMD_LOGIN, handle_login },
-  //{ CMD_LIST, handle_list },
+  { CMD_LIST, handle_list },
   { CMD_QUIT, handle_quit },
   { CMD_MSG, handle_new_msg },
   { 0x0, 0x0 }
@@ -29,7 +29,7 @@ void		broadcast_to_channel(int sender, char *msg)
 {
   t_client	*clt;
   t_client	*base;
-  
+
   base = clients->first;
   clt = find_client_by_sock(clients, sender);
   if (!clt)
@@ -131,15 +131,17 @@ int		handle_list(int sock, char *raw)
   i = 0;
   names = cmd = 0x0;
   builder = res = 0x0;
-  if (!(names = (char **) malloc((clients->nb_elem) * sizeof(char *))))
+  if (!(names = (char **) malloc((clients->nb_elem + 1) * sizeof(char *))))
     return (0);
   if (!(cmd = (char **) malloc(2 * sizeof(char *))))
     return (0);
   base = clients->first;
   while (clients->first)
     {
+      my_putstr("mdr");
       *(names + i) = my_strdup(clients->first->name);
       clients->first = clients->first->next;
+      my_putstr("test");
       i++;
     }
   builder = my_implode(names, '/');
@@ -153,6 +155,13 @@ int		handle_list(int sock, char *raw)
   free(cmd[0]);
   free(cmd[1]);
   free(cmd);
+  i = 0;
+  while (i < clients->nb_elem)
+    {
+      free(*(names + i));
+      i++;
+    }
+  free(names);
   return (1);
 }
 

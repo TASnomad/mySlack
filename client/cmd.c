@@ -1,11 +1,11 @@
 /*
 ** cmd.c for MySlack in /home/nomad/mySlack/client
-** 
+**
 ** Made by BARREAU Martin
 ** Login   <barrea_m@etna-alternance.net>
-** 
+**
 ** Started on  Sun Feb 18 22:36:53 2018 BARREAU Martin
-** Last update Wed Feb 21 19:49:44 2018 BARREAU Martin
+** Last update Thu Feb 22 14:46:39 2018 BRIAND Corentin
 */
 
 #include	<cmd.h>
@@ -20,7 +20,7 @@
 
 t_action	cmds[] = {
   { INPUT_HELP_CMD, cmd_helper },
-  //  { INPUT_LIST_CMD, req_list },
+  { INPUT_LIST_CMD, req_list },
   { INPUT_PM_CMD, send_pm },
   { INPUT_QUIT_CMD, handle_quit },
   { 0x0, 0x0 }
