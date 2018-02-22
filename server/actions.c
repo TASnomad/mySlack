@@ -103,7 +103,6 @@ int		handle_new_msg(int sock, char *raw)
   int		len;
   char		**cmd;
 
-  PRINT_NBR("__Sock : ", sock);
   i = 0;
   len = 0;
   cmd = my_explode(my_strdup(raw), ';');
