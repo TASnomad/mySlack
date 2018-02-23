@@ -1,11 +1,11 @@
 /*
 ** client.h for MySlack in /home/nomad/mySlack/server/include
-** 
+**
 ** Made by BARREAU Martin
 ** Login   <barrea_m@etna-alternance.net>
-** 
+**
 ** Started on  Sun Feb 18 22:23:25 2018 BARREAU Martin
-** Last update Mon Feb 19 23:45:13 2018 BARREAU Martin
+** Last update Fri Feb 23 09:31:11 2018 BRIAND Corentin
 */
 
 #ifndef _CLIENT_H_
@@ -59,6 +59,7 @@ int			handle_list();
 int			handle_quit();
 
 int			is_login_taken(t_list *, char *);
+int			check_login(char *buff);
 int			handle_incoming(int, char *, int);
 
 #endif /* ! _CLIENT_H_ */

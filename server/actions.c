@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 **
 ** Started on  Sun Feb 18 22:20:27 2018 BARREAU Martin
-** Last update Thu Feb 22 21:25:10 2018 BRIAND Corentin
+** Last update Fri Feb 23 09:22:03 2018 BRIAND Corentin
 */
 
 #include	<client.h>
@@ -75,6 +75,10 @@ int		handle_login(int sock, char *buff)
   i = 0;
   cmd = my_explode(buff, ';');
   res = is_login_taken(clients, cmd[1]);
+  if (res == 0)
+    {
+      res = check_login(cmd[1]);
+    }
   if (res)
       cmd[1] = my_strdup("KO");
   else
@@ -138,10 +142,11 @@ int		handle_list(int sock, char *raw)
   base = clients->first;
   while (clients->first)
     {
-      my_putstr("mdr");
-      *(names + i) = my_strdup(clients->first->name);
+      if (clients->first->name != NULL)
+	{
+	  *(names + i) = my_strdup(clients->first->name);
+	}
       clients->first = clients->first->next;
-      my_putstr("test");
       i++;
     }
   builder = my_implode(names, '/');
@@ -156,7 +161,7 @@ int		handle_list(int sock, char *raw)
   free(cmd[1]);
   free(cmd);
   i = 0;
-  while (i < clients->nb_elem)
+  while (i < clients->nb_elem && *(names + i) != NULL)
     {
       free(*(names + i));
       i++;
