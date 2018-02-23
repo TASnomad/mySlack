@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 **
 ** Started on  Sun Feb 18 22:20:27 2018 BARREAU Martin
-** Last update Fri Feb 23 09:22:03 2018 BRIAND Corentin
+** Last update Fri Feb 23 09:54:42 2018 BARREAU Martin
 */
 
 #include	<client.h>
@@ -64,6 +64,23 @@ int		handle_quit(int sock, char *raw)
   return (1);
 }
 
+void		_send_welcome(t_client *clt)
+{
+  char		*res;
+  char		**cmd;
+
+  if (!(cmd = (char **) malloc(2 * sizeof(char **))))
+    return ;
+  *(cmd + 0) = my_strdup("welcome");
+  *(cmd + 1) = my_strdup(clt->name);
+  res = my_implode(cmd, ';');
+  broadcast_to_channel(clt->fd, res);
+  free(*(cmd + 0));
+  free(*(cmd + 1));
+  free(cmd);
+  free(res);
+}
+
 int		handle_login(int sock, char *buff)
 {
   char		**cmd;
@@ -98,6 +115,7 @@ int		handle_login(int sock, char *buff)
       i += 1;
     }
   free(cmd);
+  _send_welcome(clt);
   return (!res);
 }
 
@@ -107,7 +125,6 @@ int		handle_new_msg(int sock, char *raw)
   int		len;
   char		**cmd;
 
-  PRINT_NBR("__Sock : ", sock);
   i = 0;
   len = 0;
   cmd = my_explode(my_strdup(raw), ';');

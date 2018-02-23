@@ -5,7 +5,7 @@
 ** Login   <barrea_m@etna-alternance.net>
 ** 
 ** Started on  Sun Feb 18 22:30:08 2018 BARREAU Martin
-** Last update Sun Feb 18 23:20:20 2018 BARREAU Martin
+** Last update Fri Feb 23 09:55:57 2018 BARREAU Martin
 */
 
 #include		<libmy.h>
@@ -115,10 +115,6 @@ void			main_client(t_client *clt)
 	    run = 0;
 	  else
 	    run = handle_cmd(clt, msg);
-	  /*if (!my_strncmp("quit", msg, 4))
-	    run = 0;
-	  *(msg + readed - 1) = 0x0;
-	  send_msg(clt, msg);*/
 	}
       else if (FD_ISSET(clt->fd, &rfds))
 	{
