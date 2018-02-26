@@ -1,11 +1,11 @@
 /*
 ** client.c for MySlack in /home/nomad/mySlack/server
-** 
+**
 ** Made by BARREAU Martin
 ** Login   <barrea_m@etna-alternance.net>
-** 
+**
 ** Started on  Sun Feb 18 22:17:49 2018 BARREAU Martin
-** Last update Wed Feb 21 17:51:08 2018 BARREAU Martin
+** Last update Fri Feb 23 09:33:53 2018 BRIAND Corentin
 */
 
 #include	<client.h>
@@ -37,7 +37,7 @@ t_client	*find_client_by_sock(t_list *list, int sock)
 {
   t_client	*first;
   t_client	*res;
-  
+
   first = list->first;
   while (list->first->next && list->first->fd != sock)
     list->first = list->first->next;
@@ -50,7 +50,7 @@ int		is_login_taken(t_list *list, char *name)
 {
   int		res;
   t_client	*base;
-  
+
   base = list->first;
   res = 0;
   if (!list->first->next && !list->first->name)
@@ -99,7 +99,7 @@ void		add_client(t_list *list, t_client *clt)
 void		rmv_client(t_list *list, t_client *clt)
 {
   t_client	*base;
-  
+
   base = list->first;
   if (list->nb_elem == 1 && list->first == clt)
     {
@@ -110,7 +110,7 @@ void		rmv_client(t_list *list, t_client *clt)
   else if (list->first == clt)
     {
       base = base->next;
-      base->prev = 0x0; 
+      base->prev = 0x0;
     }
   else
     {
@@ -129,4 +129,20 @@ void		rmv_client(t_list *list, t_client *clt)
     }
   list->first = base;
   list->nb_elem--;
+}
+
+int	check_login(char *buff)
+{
+  int	i;
+
+  i = 0;
+  while(buff[i] != '\0')
+    {
+      if (buff[i] == '/')
+	{
+	  return 1;
+	}
+      i++;
+    }
+  return 0;
 }

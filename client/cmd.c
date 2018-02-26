@@ -1,11 +1,11 @@
 /*
 ** cmd.c for MySlack in /home/nomad/mySlack/client
-** 
+**
 ** Made by BARREAU Martin
 ** Login   <barrea_m@etna-alternance.net>
-** 
+**
 ** Started on  Sun Feb 18 22:36:53 2018 BARREAU Martin
-** Last update Wed Feb 21 19:49:44 2018 BARREAU Martin
+** Last update Fri Feb 23 10:02:52 2018 BARREAU Martin
 */
 
 #include	<cmd.h>
@@ -20,7 +20,7 @@
 
 t_action	cmds[] = {
   { INPUT_HELP_CMD, cmd_helper },
-  //  { INPUT_LIST_CMD, req_list },
+  { INPUT_LIST_CMD, req_list },
   { INPUT_PM_CMD, send_pm },
   { INPUT_QUIT_CMD, handle_quit },
   { 0x0, 0x0 }
@@ -36,7 +36,6 @@ int		handle_cmd(t_client *clt, char *raw)
   while ((*(cmds + i)).name && !found)
     {
       if (!my_strncmp(raw, (*(cmds + i)).name, my_strlen((*(cmds + i)).name)))
-      //if (!my_strncmp(raw, (*(cmds + i)).name, my_strlen((*(cmds + i)).name)))
 	{
 	  res = (*(cmds + i)).cmd(clt, raw);
 	  found = 1;
@@ -58,7 +57,7 @@ int		cmd_helper(t_client *clt, char *raw)
   my_putstr(YELLOW"Availables MySlack commands:\n"RESET);
   my_putstr(YELLOW"- '/quit': deconnect you from the server\n"RESET);
   my_putstr(YELLOW"- '/list': get all usernames connected to the server\n"RESET);
-  my_putstr(YELLOW"- '/pm xxx yyyy': send personnally to xxx the yyy message\n"RESET);
+  my_putstr(YELLOW"- '/pm xxx yyyy': send personnally to xxx the yyy message (SOON)\n"RESET);
   my_putstr(YELLOW"- '/help': will prompt those messages'\n"RESET);
   return (1);
 }

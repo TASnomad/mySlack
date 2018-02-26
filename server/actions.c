@@ -1,11 +1,11 @@
 /*
 ** actions.c for MySlack in /home/nomad/mySlack/server
-** 
+**
 ** Made by BARREAU Martin
 ** Login   <barrea_m@etna-alternance.net>
-** 
+**
 ** Started on  Sun Feb 18 22:20:27 2018 BARREAU Martin
-** Last update Wed Feb 21 19:44:59 2018 BARREAU Martin
+** Last update Fri Feb 23 09:54:42 2018 BARREAU Martin
 */
 
 #include	<client.h>
@@ -19,7 +19,7 @@
 
 t_action	actions[] = {
   { CMD_LOGIN, handle_login },
-  //{ CMD_LIST, handle_list },
+  { CMD_LIST, handle_list },
   { CMD_QUIT, handle_quit },
   { CMD_MSG, handle_new_msg },
   { 0x0, 0x0 }
@@ -29,7 +29,7 @@ void		broadcast_to_channel(int sender, char *msg)
 {
   t_client	*clt;
   t_client	*base;
-  
+
   base = clients->first;
   clt = find_client_by_sock(clients, sender);
   if (!clt)
@@ -64,6 +64,23 @@ int		handle_quit(int sock, char *raw)
   return (1);
 }
 
+void		_send_welcome(t_client *clt)
+{
+  char		*res;
+  char		**cmd;
+
+  if (!(cmd = (char **) malloc(2 * sizeof(char **))))
+    return ;
+  *(cmd + 0) = my_strdup("welcome");
+  *(cmd + 1) = my_strdup(clt->name);
+  res = my_implode(cmd, ';');
+  broadcast_to_channel(clt->fd, res);
+  free(*(cmd + 0));
+  free(*(cmd + 1));
+  free(cmd);
+  free(res);
+}
+
 int		handle_login(int sock, char *buff)
 {
   char		**cmd;
@@ -75,6 +92,10 @@ int		handle_login(int sock, char *buff)
   i = 0;
   cmd = my_explode(buff, ';');
   res = is_login_taken(clients, cmd[1]);
+  if (res == 0)
+    {
+      res = check_login(cmd[1]);
+    }
   if (res)
       cmd[1] = my_strdup("KO");
   else
@@ -94,6 +115,7 @@ int		handle_login(int sock, char *buff)
       i += 1;
     }
   free(cmd);
+  _send_welcome(clt);
   return (!res);
 }
 
@@ -130,14 +152,17 @@ int		handle_list(int sock, char *raw)
   i = 0;
   names = cmd = 0x0;
   builder = res = 0x0;
-  if (!(names = (char **) malloc((clients->nb_elem) * sizeof(char *))))
+  if (!(names = (char **) malloc((clients->nb_elem + 1) * sizeof(char *))))
     return (0);
   if (!(cmd = (char **) malloc(2 * sizeof(char *))))
     return (0);
   base = clients->first;
   while (clients->first)
     {
-      *(names + i) = my_strdup(clients->first->name);
+      if (clients->first->name != NULL)
+	{
+	  *(names + i) = my_strdup(clients->first->name);
+	}
       clients->first = clients->first->next;
       i++;
     }
@@ -152,6 +177,13 @@ int		handle_list(int sock, char *raw)
   free(cmd[0]);
   free(cmd[1]);
   free(cmd);
+  i = 0;
+  while (i < clients->nb_elem && *(names + i) != NULL)
+    {
+      free(*(names + i));
+      i++;
+    }
+  free(names);
   return (1);
 }
 
